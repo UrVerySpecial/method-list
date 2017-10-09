@@ -5,6 +5,14 @@
         App
       </a>
     </div>
+    <div class="navbar-menu">
+      <div class="navbar-start">
+        <router-link :to="{name: 'AdminMenu'}"
+          active-class="is-active"
+          class="navbar-item is-tab">AdminMenu
+        </router-link>
+      </div>
+    </div>
   </nav>
 </template>
 
