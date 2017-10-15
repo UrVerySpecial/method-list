@@ -12,7 +12,8 @@ let applicationSchema =  new Schema({
   issueDate: Date,
   point: String,
   likeCount: Number,
-  createDate: Date
+  createDate: Date,
+  maker: String
 })
 
 module.exports = mongoose.model('Application', applicationSchema)

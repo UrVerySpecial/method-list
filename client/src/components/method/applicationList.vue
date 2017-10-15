@@ -34,8 +34,49 @@
 <script>
 export default {
   data () {
-    return {
-      applicationFields: [
+    return {}
+    //   applicationFields: [
+    //     {
+    //       key: 'kind',
+    //       label: '機種'
+    //     },
+    //     {
+    //       key: 'usedEquipment',
+    //       label: '使用装置'
+    //     },
+    //     {
+    //       key: 'link',
+    //       label: 'タイトル'
+    //     },
+    //     {
+    //       key: 'issueDate',
+    //       label: '発行年月'
+    //     },
+    //     {
+    //       key: 'point',
+    //       label: 'おすすめポイント'
+    //     },
+    //     {
+    //       key: 'likeCount',
+    //       label: '評価'
+    //     },
+    //     {
+    //       key: 'createDate',
+    //       label: '登録日'
+    //     },
+    //     {
+    //       key: 'actions',
+    //       label: this.test ? 'ok' : 'no'
+    //     }
+    //   ]
+    // }
+  },
+  computed: {
+    amIApplication () {
+      return this.mode === 'app'
+    },
+    applicationFields () {
+      let commonList = [
         {
           key: 'kind',
           label: '機種'
@@ -54,26 +95,39 @@ export default {
         },
         {
           key: 'point',
-          label: 'おすすめポイント'
-        },
-        {
-          key: 'likeCount',
-          label: '評価'
-        },
-        {
-          key: 'createDate',
-          label: '登録日'
-        },
-        {
-          key: 'actions',
-          label: '削除'
+          label: this.amIApplication ? 'おすすめポイント' : 'コメント'
         }
       ]
+      if (this.amIApplication) {
+        commonList.push(
+          {
+            key: 'likeCount',
+            label: '評価'
+          },
+          {
+            key: 'createDate',
+            label: '登録日'
+          }
+        )
+      } else {
+        commonList.push({
+          key: 'maker',
+          label: 'メーカー'
+        })
+      }
+      commonList.push({
+        key: 'actions',
+        label: '削除'
+      })
+      return commonList
     }
   },
   props: {
     applications: {
       type: Array
+    },
+    mode: {
+      type: String
     }
   },
   methods: {

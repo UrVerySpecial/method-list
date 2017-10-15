@@ -22,7 +22,8 @@ let methodSchema =  new Schema({
     title: String,
     url: String
   },
-  applications: [{ type: Schema.Types.ObjectId, ref: 'Application' }]
+  applications: [{ type: Schema.Types.ObjectId, ref: 'Application' }],
+  otherApp: [{ type: Schema.Types.ObjectId, ref: 'Application' }],
 })
 
 module.exports = mongoose.model('Method', methodSchema)

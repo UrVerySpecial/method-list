@@ -14,7 +14,7 @@ exports.getMethods = (req, res) => {
 }
 exports.getMethod = (req, res) => {
   console.log(req.params.id)
-  return Method.findById(req.params.id).populate('applications').exec((err, method) => {
+  return Method.findById(req.params.id).populate('applications').populate('otherApp').exec((err, method) => {
   // return Method.findById(req.params.id, function (err, method) {
     console.log(method)
     if (!err) {
@@ -59,6 +59,31 @@ exports.newApplication = (req, res) => {
     })
   })
 }
+exports.newOther = (req, res) => {
+  console.log(req)
+  console.log(req.body)
+  let newApplication = new Application(req.body)
+  newApplication.createDate = new Date()
+  Method.findById(req.params.id, function (err, method) {
+    if (err) {
+      console.log(err)
+      return res.send(err)
+    }
+    newApplication.save(err=> {
+      if (err) {
+        return res.send(err)
+      }
+      method.otherApp.push(newApplication)
+      method.save(err => {
+        if (err) {
+          res.send(err)
+        }
+        res.json({message: 'method updated' })
+      })
+    })
+  })
+}
+
 exports.deleteAppication = (req, res) => {
   console.log(req)
   console.log(req.body)

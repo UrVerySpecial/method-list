@@ -27,11 +27,20 @@
     <span class="clearfix"></span>
     <hr>
     <b-card header="新規アプリケーション"　bg-variant="light" v-if="showApplicationForm">
-      <application-form @addApplication="addApplication" v-model="application"></application-form>
+      <application-form @addApplication="addApplication" v-model="application" mode="app"></application-form>
     </b-card>
-    <application-list @reset="getItem" :applications="method.applications"></application-list>
+    <application-list @reset="getItem" :applications="method.applications" mode="app"></application-list>
     <hr>
+
     <h4>他社アプリ</h4>
+      <button class="btn btn-info float-right" @click="newOtherApp">追加</button>
+    </h4>
+    <span class="clearfix"></span>
+    <hr>
+    <b-card header="新規他社アプリケーション"　bg-variant="light" v-if="showOtherForm">
+      <application-form @addApplication="addOther" v-model="application" mode="other"></application-form>
+    </b-card>
+    <application-list @reset="getItem" :applications="method.otherApp" mode="other"></application-list>
     <hr>
   </div>
 </template>
@@ -48,6 +57,7 @@ export default {
     return {
       method: null,
       showApplicationForm: false,
+      showOtherForm: false,
       application: null
     }
   },
@@ -58,6 +68,9 @@ export default {
   methods: {
     newApplication () {
       this.showApplicationForm = !this.showApplicationForm
+    },
+    newOtherApp () {
+      this.showOtherForm = !this.showOtherForm
     },
     getItem () {
       this.initApplication()
@@ -76,6 +89,14 @@ export default {
         this.getItem()
       })
     },
+    addOther () {
+      console.log(this.application)
+      this.$http.post(`/methods/${this.$route.params.id}/newOther`, this.application)
+      .then(res => {
+        console.log(res)
+        this.getItem()
+      })
+    },
     initApplication () {
       this.showApplicationForm = false
       this.application = {
@@ -87,7 +108,8 @@ export default {
         },
         issueDate: '',
         point: '',
-        likeCount: 0
+        likeCount: 0,
+        maker: ''
       }
     },
     changeToEnterCode (str) {

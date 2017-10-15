@@ -18,34 +18,6 @@
         </ul>
       </template>
     </b-table>
-<!--
-    <b-table
-      :data="items"
-      :striped="true"
-      :narrowed="true">
-      <template scope="props">
-        <b-table-column label="分類" width="40">
-            {{ props.row.class }}
-        </b-table-column>
-        <b-table-column label="項目" width="300">
-            {{ props.row.item }}
-        </b-table-column>
-        <b-table-column label="基準値" width="300">
-            {{ props.row.standardValue }}
-        </b-table-column>
-        <b-table-column label="検査方法">
-          <ul>
-            <li v-for="method in props.row.method">
-              <div v-if="method.haveLink">
-                <router-link :to="{ name: 'Method', params: {id: method._id} }">{{method.title}}</router-link>
-              </div>
-              <div v-else>
-                {{method.title}}
-              </div>
-            </li>
-          </ul>
-          <!-- <router-link :to="{ name: 'NewMethod' }">New Method</router-link>
-            {{ props.row.title }} -->
   </div>
 </template>
 

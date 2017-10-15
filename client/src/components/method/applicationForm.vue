@@ -15,8 +15,11 @@
     <b-form-group label="発行年月">
       <b-form-input type="date" v-model="application.issueDate" placeholder="発行年月"></b-form-input>
     </b-form-group>
-    <b-form-group label="おすすめポイント">
-      <b-form-textarea v-model="application.point" placeholder="おすすめポイント"></b-form-textarea>
+    <b-form-group :label="pointLabel">
+      <b-form-textarea v-model="application.point" :placeholder="pointLabel"></b-form-textarea>
+    </b-form-group>
+    <b-form-group label="メーカー" v-if="!amIApplication">
+      <b-form-input type="text" v-model="application.maker" placeholder="メーカー"></b-form-input>
     </b-form-group>
     <button type="submit" class="btn btn-info">アプリケーション追加</button>
   </b-form>
@@ -30,6 +33,18 @@ export default {
   props: {
     application: {
       type: Object
+    },
+    mode: {
+      type: String
+    }
+  },
+  computed: {
+    amIApplication () {
+      return this.mode === 'app'
+    },
+    pointLabel () {
+      console.log('this.amIApplication', this.amIApplication)
+      return this.amIApplication ? 'おすすめポイント' : 'コメント'
     }
   },
   methods: {
