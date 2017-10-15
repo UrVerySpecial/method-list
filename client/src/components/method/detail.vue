@@ -1,56 +1,38 @@
 <template>
   <div v-if="method">
-    <h1 class="title">{{method.title}}</h1>
-    <h2 class="subtitle is-6">別紙:
-      <a :href="method.annexedLink.link">{{method.annexedLink.title}}</a>
-    </h2>
+    <h1>{{method.title}}
+      <small class="text-muted">
+        別紙:
+        <a target="_blank" :href="method.annexedLink.url">{{method.annexedLink.title}}</a>
+      </small>
+    </h1>
     <hr>
-    <h2 class="subtitle is-4">関連する公定法</h2>
-    <ul>
-      <li v-for="sub in method.submenu">
-        <div class="card">
-          <div class="card-header">
-            <p class="card-header-title">
-              {{sub.title}}
-            </p>
-          </div>
-          <div class="card-content">
-            <div class="content">
-              <div v-if="sub.link && sub.linkTitle">
-                <a :href="sub.link">{{sub.linkTitle}}</a>
-              </div>
-            </div>
-            <template v-for="an in sub.annexed">
-              <label for="" class="label">{{an.title}}</label>
-              <p>{{an.desc}}</p>
-            </template>
-          </div>
-        </div>
-      </li>
-    </ul>
+    <h4>関連する公定法</h4>
     <hr>
-    <div class="card">
-      <div class="card-header">
-        <p class="card-header-title">
-          アプリケーション
-        </p>
-        <a class="card-header-icon" @click="newApplication">
-          <b-icon icon="add"></b-icon>
-        </a>
-      </div>
-      <div class="card-content">
-        <div class="content">
-          <div class="message" v-if="showApplicationForm">
-            <div class="message-body">
-              <application-form @addApplication="addApplication" v-model="application"></application-form>
-            </div>
-          </div>
-          <application-list @reset="getItem" :applications="method.applications"></application-list>
-        </div>
-      </div>
-    </div>
+    <b-card v-for="(sub, index) in method.submenu" :key="index" :header="sub.title">
+      リンク：<a target="_blank" :href="sub.link.url" class="card-link">{{sub.link.title}}</a>
+      <b-list-group>
+        <b-list-group-item v-for="(ax,index) in sub.annexed" :key="index">
+          <h6>
+            {{ax.title}}
+          </h6>
+          <p v-html="changeToEnterCode(ax.desc)"></p>
+        </b-list-group-item>
+      </b-list-group>
+    </b-card>
     <hr>
-    <h2 class="subtitle is-4">他社アプリ</h2>
+    <h4>アプリケーション
+      <button class="btn btn-info float-right" @click="newApplication">追加</button>
+    </h4>
+    <span class="clearfix"></span>
+    <hr>
+    <b-card header="新規アプリケーション"　bg-variant="light" v-if="showApplicationForm">
+      <application-form @addApplication="addApplication" v-model="application"></application-form>
+    </b-card>
+    <application-list @reset="getItem" :applications="method.applications"></application-list>
+    <hr>
+    <h4>他社アプリ</h4>
+    <hr>
   </div>
 </template>
 
@@ -99,12 +81,17 @@ export default {
       this.application = {
         kind: '',
         usedEquipment: '',
-        title: '',
-        titleLink: '',
+        link: {
+          title: '',
+          url: ''
+        },
         issueDate: '',
         point: '',
         likeCount: 0
       }
+    },
+    changeToEnterCode (str) {
+      return str.replace(/\n/g, '<br/>')
     }
   }
 }

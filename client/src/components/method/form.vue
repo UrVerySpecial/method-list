@@ -1,80 +1,61 @@
 <template>
   <div>
-    <b-field label="分析法名">
-      <b-input v-model="method.title" placeholder="分析法名" required></b-input>
-    </b-field>
-    <div class="field">
-      <b-switch v-model="method.haveLink">リンク有無</b-switch>
-    </div>
+    <b-form-group label="分析法名" label-for="title">
+      <b-form-input id="title" type="text" v-model="method.title" placeholder="分析法名" required></b-form-input>
+    </b-form-group>
+    <b-form-checkbox v-model="method.haveLink">
+      リンク有無
+    </b-form-checkbox>
     <div v-show="method.haveLink">
-      <b-field grouped>
-        <b-field label="別紙名">
-          <b-input v-model="method.annexedLink.title" placeholder="別紙名"></b-input>
-        </b-field>
-        <b-field label="別紙リンク">
-          <b-input v-model="method.annexedLink.link" placeholder="別紙リンク"></b-input>
-        </b-field>
-      </b-field>
-      <label class="tabel">
-        関連する公定法
-      </label>
+      <b-form-group label="別紙名" label-for="annexedLinkTitle">
+        <b-form-input id="annexedLinkTitle" type="text" v-model="method.annexedLink.title" placeholder="別紙名"></b-form-input>
+      </b-form-group>
+      <b-form-group label="別紙リンク" label-for="annexedLinkLink">
+        <b-form-input id="annexedLinkLink" type="text" v-model="method.annexedLink.url" placeholder="別紙リンク"></b-form-input>
+      </b-form-group>
+      <hr>
+      <h5>関連する公定法</h5>
       <submenu-list :submenu="method.submenu" v-if="method.submenu.length > 0"></submenu-list>
-      <div class="message is-primary">
-        <div class="message-header">
-          <p>公定法追加</p>
-          <button class="button" type="button" @click="addSubmenu">
-            <b-icon icon="add"></b-icon>
+      <b-card header="公定法追加">
+        <div class="card-block">
+          <b-form-group label="タイトル" label-for="submenuTitle">
+            <b-form-input id="submenuTitle" type="text" v-model="submenu.title" placeholder="タイトル"></b-form-input>
+          </b-form-group>
+          <b-form-group label="リンクタイトル" label-for="submenuLinkTitle">
+            <b-form-input id="submenuLinkTitle" type="text" v-model="submenu.link.title" placeholder="リンクタイトル"></b-form-input>
+          </b-form-group>
+          <b-form-group label="リンク" label-for="submenuLink">
+            <b-form-input id="submenuLink" type="text" v-model="submenu.link.url" placeholder="リンク"></b-form-input>
+          </b-form-group>
+          <b-card header="別紙"　bg-variant="light">
+            <b-table striped hover
+                  :items="submenu.annexed"
+                  :fields = "annexedFields"
+                  >
+              <template slot="desc" scope="data">
+                <p v-html="changeToEnterCode(data.value)"></p>
+              </template>
+              <template slot="actions" scope="data">
+                <button class="btn btn-danger" @click="submenu.annexed.splice(data.index)">
+                  削除
+                </button>
+              </template>
+            </b-table>
+            <b-form-group label="別紙名" label-for="annexedTitle">
+              <b-form-input id="annexedTitle" type="text" v-model="annexed.title" placeholder="別紙名"></b-form-input>
+            </b-form-group>
+            <b-form-group label="別紙名" label-for="annexedDesc">
+              <b-form-textarea id="annexedDesc" v-model="annexed.desc" @keydown="inputHandler" placeholder="説明" :rows="2"></b-form-textarea>
+            </b-form-group>
+            <button class="btn btn-warning" type="button" @click="addAnnexed">
+              別紙追加
+            </button>
+          </b-card>
+          <button class="btn btn-primary" type="button" @click="addSubmenu">
+            公定法追加
           </button>
         </div>
-        <div class="message-body">
-          <b-field label="タイトル">
-            <b-input v-model="submenu.title" placeholder="タイトル"></b-input>
-          </b-field>
-          <b-field label="リンクタイトル">
-            <b-input v-model="submenu.linkTitle" placeholder="リンクタイトル"></b-input>
-          </b-field>
-          <b-field label="リンク">
-            <b-input v-model="submenu.link" placeholder="リンク"></b-input>
-          </b-field>
-          <label for="" class="label">別紙</label>
-          <b-table :data="submenu.annexed" :bordered="true" :striped="true" :narrowed="true">
-            <template scope="props">
-              <b-table-column label="別紙名">
-                  {{ props.row.title }}
-              </b-table-column>
-              <b-table-column label="説明">
-                  {{ props.row.desc }}
-              </b-table-column>
-              <b-table-column label="削除" width="100">
-                <button type="button" class="button is-danger is-small" @click="deleteAnnexed(props.index)">
-                  <b-icon icon="delete"></b-icon>
-                </button>
-              </b-table-column>
-            </template>
-          </b-table>
-          <template scope="props">
-            <b-table-column label="タイトル">
-                {{ props.row.title }}
-            </b-table-column>
-            <b-table-column label="リンク">
-                {{ props.row.link }}
-            </b-table-column>
-          </template>
-          <div class="message">
-            <div class="message-body">
-              <b-field label="別紙名">
-                <b-input v-model="annexed.title" placeholder="別紙名"></b-input>
-              </b-field>
-              <b-field label="説明">
-                <b-input v-model="annexed.desc" @keydown="inputHandler" type="textarea" placeholder="説明"></b-input>
-              </b-field>
-              <button class="button is-warning" type="button" @click="addAnnexed">
-                <b-icon icon="add"></b-icon>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      </b-card>
     </div>
   </div>
 </template>
@@ -116,7 +97,10 @@ export default {
     initSubMenu () {
       this.submenu = {
         title: '',
-        link: '',
+        link: {
+          title: '',
+          url: ''
+        },
         annexed: []
       }
       this.initAnnexed()
@@ -126,19 +110,39 @@ export default {
         title: '',
         desc: ''
       }
+    },
+    changeToEnterCode (str) {
+      return str.replace(/\n/g, '<br/>')
     }
   },
   data () {
     return {
       submenu: {
         title: '',
-        link: '',
+        link: {
+          title: '',
+          url: ''
+        },
         annexed: []
       },
       annexed: {
         title: '',
         desc: ''
-      }
+      },
+      annexedFields: [
+        {
+          key: 'title',
+          label: 'タイトル'
+        },
+        {
+          key: 'desc',
+          label: '詳細'
+        },
+        {
+          key: 'actions',
+          label: '削除'
+        }
+      ]
     }
   }
 }

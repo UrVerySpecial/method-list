@@ -1,33 +1,15 @@
 <template>
   <div>
-    <h1 class="title">検査方法一覧</h1>
-    <div class="is-pulled-right">
-      <router-link class="button is-primary" :to="{ name: 'NewMethod' }">新規作成</router-link>
+    <h3>検査方法一覧</h3>
+    <div class="float-right">
+      <router-link class="btn btn-primary" :to="{ name: 'NewMethod' }">新規作成</router-link>
     </div>
-    <b-table
-      :data="methods"
-      :striped="true"
-      :narrowed="true">
-      <template scope="props">
-        <b-table-column label="分析法名" width="100">
-            {{ props.row.title }}
-        </b-table-column>
-        <b-table-column label="別紙名" width="100">
-          <span v-if="props.row.annexedLink">
-            {{props.row.annexedLink.title}}
-          </span>
-        </b-table-column>
-        <b-table-column label="別紙リンク" width="100">
-          <span v-if="props.row.annexedLink">
-            {{props.row.annexedLink.link}}
-          </span>
-        </b-table-column>
-        <b-table-column label="関連する公定法" width="500">
-          <submenu-list :submenu="props.row.submenu"></submenu-list>
-        </b-table-column>
-        <b-table-column label="詳細">
-          <router-link class="button is-link" :to="{ name: 'Method', params: {id: props.row._id} }">詳細</router-link>
-        </b-table-column>
+    <span class="clearfix"></span>
+    <b-table striped hover
+      :items="methods"
+      :fields="fields">
+      <template slot="actions" scope="row">
+        <router-link class="btn is-link" :to="{ name: 'Method', params: {id: row.item._id} }">詳細</router-link>
       </template>
     </b-table>
   </div>
@@ -41,7 +23,21 @@ export default {
   },
   data () {
     return {
-      methods: []
+      methods: [],
+      fields: [
+        {
+          key: 'title',
+          sortable: true
+        },
+        {
+          key: 'haveLink',
+          label: 'リンク有無'
+        },
+        {
+          key: 'actions',
+          label: '詳細'
+        }
+      ]
     }
   },
   created () {

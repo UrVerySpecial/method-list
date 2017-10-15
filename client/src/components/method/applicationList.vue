@@ -1,45 +1,86 @@
 <template>
-  <b-table :data="applications" :bordered="true" :striped="true" :narrowed="true">
-    <template scope="props">
-      <b-table-column label="機種" width="30">
-        {{props.row.kind}}
-      </b-table-column>
-      <b-table-column label="使用装置" width="50">
-        {{props.row.usedEquipment}}
-      </b-table-column>
-      <b-table-column label="タイトル" width="100">
-        {{props.row.title}}
-      </b-table-column>
-      <b-table-column label="発行年月" width="10s0">
-        {{props.row.issueDate | dateFormat}}
-      </b-table-column>
-      <b-table-column label="おすすめポイント" width="300">
-        <p v-html="changeToEnterCode(props.row.point)"></p>
-      </b-table-column>
-      <b-table-column label="評価" width="200">
-        {{props.row.likeCount}}
-        <button class="button is-primary is-small is-pulled-right" @click="addLike(props.row._id)">
-          <b-icon icon="thumb_up"></b-icon>
-        </button>
-      </b-table-column>
-      <b-table-column label="登録日" width="50">
-        {{props.row.createDate | dateFormat}}
-      </b-table-column>
+  <b-table :items="applications" :fields="applicationFields" striped hover>
+    <template slot="link" scope="data">
+      <div v-if="data.value.url">
+        <a :href="data.value.url">{{data.value.title}}</a>
+      </div>
+      <div v-else>
+        {{data.value.title}}
+      </div>
+    </template>
+    <template slot="point" scope="data">
+      <p v-html="changeToEnterCode(data.value)"></p>
+    </template>
+    <template slot="issueDate" scope="data">
+      {{data.value | dateFormat}}
+    </template>
+    <template slot="createDate" scope="data">
+      {{data.value | dateFormat}}
+    </template>
+    <template slot="likeCount" scope="data">
+      {{data.value}}
+      <button class="btn btn-primary btn-sm" @click="addLike(data.index)">
+        いいね
+      </button>
+    </template>
+    <template slot="actions" scope="data">
+      <button class="btn btn-danger btn-sm" @click="deleteApplication(data.index)">
+        削除
+      </button>
     </template>
   </b-table>
 </template>
 
 <script>
 export default {
+  data () {
+    return {
+      applicationFields: [
+        {
+          key: 'kind',
+          label: '機種'
+        },
+        {
+          key: 'usedEquipment',
+          label: '使用装置'
+        },
+        {
+          key: 'link',
+          label: 'タイトル'
+        },
+        {
+          key: 'issueDate',
+          label: '発行年月'
+        },
+        {
+          key: 'point',
+          label: 'おすすめポイント'
+        },
+        {
+          key: 'likeCount',
+          label: '評価'
+        },
+        {
+          key: 'createDate',
+          label: '登録日'
+        },
+        {
+          key: 'actions',
+          label: '削除'
+        }
+      ]
+    }
+  },
   props: {
     applications: {
       type: Array
     }
   },
   methods: {
-    addLike (applicationId) {
-      console.log(applicationId)
-      this.$http.patch(`methods/addLike/${applicationId}`)
+    addLike (index) {
+      console.log(index)
+      console.log(this.applications[index])
+      this.$http.patch(`methods/addLike/${this.applications[index]._id}`)
       .then(res => {
         console.log(res)
         this.$emit('reset')
@@ -47,6 +88,15 @@ export default {
     },
     changeToEnterCode (str) {
       return str.replace(/\n/g, '<br/>')
+    },
+    deleteApplication (index) {
+      console.log(index)
+      console.log(this.applications[index])
+      this.$http.delete(`methods/deleteAppication/${this.applications[index]._id}`)
+      .then(res => {
+        console.log(res)
+        this.$emit('reset')
+      })
     }
   }
 }

@@ -4,17 +4,20 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import 'babel-polyfill'
-import Buefy from 'buefy'
-import 'buefy/lib/buefy.css'
+
 import axios from 'axios'
 import './filter'
 import moment from 'moment'
+import BootstrapVue from 'bootstrap-vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+
+Vue.use(BootstrapVue)
 
 moment.locale('ja')
 Vue.config.productionTip = false
 axios.defaults.baseURL = '/api'
 Vue.prototype.$http = axios
-Vue.use(Buefy)
 
 /* eslint-disable no-new */
 new Vue({

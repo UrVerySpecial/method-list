@@ -1,14 +1,14 @@
 <template>
   <div>
     <h1 class="title">分析法新規作成</h1>
-    <div class="is-pulled-right">
+    <div class="float-right">
       <router-link class="button is-primary" :to="{ name: 'MethodList' }">リストへ</router-link>
     </div>
-    <div class="is-clearfix"></div>
-    <form @submit.prevent="save">
+    <div class="clearfix"></div>
+    <b-form @submit.prevent="save">
       <method-form v-model="method"></method-form>
-      <button class="button is-primary" type="submit">追加</button>
-    </form>
+      <button class="btn btn-primary" type="submit">追加</button>
+    </b-form>
   </div>
 </template>
 
@@ -20,37 +20,16 @@ export default {
   },
   data () {
     return {
-      method: {
-        title: '',
-        haveLink: false,
-        submenu: [],
-        annexedLink: {
-          title: '',
-          link: ''
-        },
-        applications: []
-      },
-      submenu: {
-        title: '',
-        link: '',
-        annexed: []
-      },
-      annexed: {
-        title: '',
-        desc: ''
-      }
+      method: {}
     }
+  },
+  created () {
+    this.initMethod()
   },
   methods: {
     async save () {
       await this.$http.post('methods', this.method)
-      this.$toast.open('作成成功')
       this.initMethod()
-    },
-    addApplication () {
-      let newApplication = Object.assign({}, this.application)
-      this.method.applications.push(newApplication)
-      this.initApplication()
     },
     initMethod () {
       this.method = {
@@ -59,22 +38,9 @@ export default {
         submenu: [],
         annexedLink: {
           title: '',
-          link: ''
+          url: ''
         },
         applications: []
-      }
-    },
-    initApplication () {
-      this.application = {
-        type: '',
-        usedEquipment: '',
-        title: '',
-        titleLink: '',
-        issueDate: '',
-        point: '',
-        likeCount: '',
-        updateDate: '',
-        deleteComment: ''
       }
     }
   }

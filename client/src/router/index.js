@@ -20,7 +20,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Items',
+      name: 'ItemList',
       component: ItemList
     },
     {
@@ -31,7 +31,7 @@ export default new Router({
     {
       path: '/admin',
       name: 'admin',
-      component: {template: '<div><h1 class="title">Admin Menu</h1><router-view></router-view></div>'},
+      component: {template: '<div><h1>Admin Menu</h1><router-view></router-view></div>'},
       children: [
         {
           path: 'menu',

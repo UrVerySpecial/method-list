@@ -1,19 +1,19 @@
 <template>
-  <nav class="navbar has-shadow" role="navigation" aria-label="main navigation">
+  <b-navbar type="light" variant="light">
     <div class="navbar-brand">
       <a class="navbar-item" href="#">
         App
       </a>
     </div>
-    <div class="navbar-menu">
-      <div class="navbar-start">
+    <b-nav is-nav-bar>
+      <b-nav-item>
         <router-link :to="{name: 'AdminMenu'}"
           active-class="is-active"
           class="navbar-item is-tab">AdminMenu
         </router-link>
-      </div>
-    </div>
-  </nav>
+      </b-nav-item>
+    </b-nav>
+  </b-navbar>
 </template>
 
 <script>

@@ -59,6 +59,13 @@ exports.newApplication = (req, res) => {
     })
   })
 }
+exports.deleteAppication = (req, res) => {
+  console.log(req)
+  console.log(req.body)
+  Application.remove({_id: req.params.id}, function (err, method) {
+    res.json({message: 'application deleted' })
+  })
+}
 exports.addLike = (req, res) => {
   console.log(req.params.applicationId)
   return Application.findById(req.params.applicationId, function (err, application) {

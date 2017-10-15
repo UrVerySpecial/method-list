@@ -1,6 +1,24 @@
 <template>
   <div>
-    <h1 class="title">水質基準項目(51項目)</h1>
+    <h1>水質基準項目(51項目)</h1>
+    <hr>
+    <b-table striped bordered hover
+      :items="items"
+      :fields="itemFields">
+      <template slot="method" scope="data">
+        <ul>
+          <li v-for="method in data.value" :key="method._id">
+            <div v-if="method.haveLink">
+              <router-link :to="{ name: 'Method', params: {id: method._id} }">{{method.title}}</router-link>
+            </div>
+            <div v-else>
+              {{method.title}}
+            </div>
+          </li>
+        </ul>
+      </template>
+    </b-table>
+<!--
     <b-table
       :data="items"
       :striped="true"
@@ -28,9 +46,6 @@
           </ul>
           <!-- <router-link :to="{ name: 'NewMethod' }">New Method</router-link>
             {{ props.row.title }} -->
-        </b-table-column>
-      </template>
-    </b-table>
   </div>
 </template>
 
@@ -39,7 +54,24 @@ export default {
   data () {
     return {
       items: [],
-      methods: []
+      itemFields: [
+        {
+          key: 'class',
+          label: '分類'
+        },
+        {
+          key: 'item',
+          label: '項目'
+        },
+        {
+          key: 'standardValue',
+          label: '基準値'
+        },
+        {
+          key: 'method',
+          label: '検査方法'
+        }
+      ]
     }
   },
   computed: {
@@ -49,16 +81,8 @@ export default {
   },
   created () {
     this.getItemList()
-    this.getMethodList()
   },
   methods: {
-    getMethodList () {
-      return this.$http.get('methods')
-      .then(res => {
-        console.log(res)
-        this.methods = res.data
-      })
-    },
     getItemList () {
       return this.$http.get('items')
       .then(res => {

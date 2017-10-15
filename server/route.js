@@ -9,6 +9,7 @@ router.get('/methods', methodController.getMethods)
 router.get('/methods/:id', methodController.getMethod)
 router.post('/methods', methodController.createMethod)
 router.post('/methods/:id/newApplication', methodController.newApplication)
+router.delete('/methods/deleteAppication/:id', methodController.deleteAppication)
 router.patch('/methods/addLike/:applicationId', methodController.addLike)
 router.get('/', function (req, res, next) {
   res.sendFile(path.join(__dirname, './public', 'index.html'))

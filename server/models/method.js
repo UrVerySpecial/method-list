@@ -8,7 +8,10 @@ let methodSchema =  new Schema({
   submenu: [
     {
       title: String,
-      link: String,
+      link: {
+        title: String,
+        url: String
+      },
       annexed: [{
         title: String,
         desc: String
@@ -17,7 +20,7 @@ let methodSchema =  new Schema({
   ],
   annexedLink: {
     title: String,
-    Link: String
+    url: String
   },
   applications: [{ type: Schema.Types.ObjectId, ref: 'Application' }]
 })

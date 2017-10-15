@@ -1,6 +1,20 @@
 <template>
-  <b-table :data="submenu" :bordered="true" :striped="true" :narrowed="true">
-    <template scope="props">
+  <b-table :items="submenu" :fields="submenuFields" striped hover>
+    <template slot="link" scope="data">
+      <div v-if="data.value.url">
+        <a :href="data.value.url">{{data.value.title}}</a>
+      </div>
+      <div v-else>
+        {{data.value.title}}
+      </div>
+    </template>
+    <template slot="actions" scope="data">
+      <button class="btn btn-danger" @click="submenu.splice(data.index)">
+        削除
+      </button>
+    </template>
+  </b-table>
+    <!-- <template scope="props">
       <b-table-column label="タイトル">
           {{ props.row.title }}
       </b-table-column>
@@ -22,7 +36,7 @@
           <b-icon icon="delete"></b-icon>
         </button>
       </b-table-column>
-    </template>
+    </template> -->
   </b-table>
 </template>
 
@@ -36,6 +50,24 @@ export default {
   methods: {
     deleteSubmenu (index) {
       this.submenu.splice(index, 1)
+    }
+  },
+  data () {
+    return {
+      submenuFields: [
+        {
+          key: 'title',
+          label: 'タイトル'
+        },
+        {
+          key: 'link',
+          label: 'リンク'
+        },
+        {
+          key: 'actions',
+          label: '削除'
+        }
+      ]
     }
   }
 }
